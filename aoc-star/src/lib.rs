@@ -1,7 +1,6 @@
 mod cli;
 mod runner;
 
-use aoc_client::last_unlocked_day;
 pub use aoc_star_derive::star;
 use chrono::Datelike;
 use clap::Parser;
@@ -25,10 +24,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let year = command_argument.year.unwrap_or(chrono::Utc::now().year());
 
-    let day = match command_argument.day {
-        Some(day) => day,
-        None => last_unlocked_day(year).unwrap_or_else(|| panic!("AoC {year} is not unlocked yet")),
-    };
+    let day = command_argument.day;
 
     let part = command_argument.part.unwrap_or(1);
 

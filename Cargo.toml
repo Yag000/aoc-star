@@ -3,5 +3,10 @@ members = [
     "aoc-star",
     "aoc-star-derive",
 ]
-resolver = "2"
+resolver = "3"
+
+[patch.crates-io]
+aoc-star = { path = "aoc-star" }
+aoc-star-derive = { path = "aoc-star-derive" }
+
 
