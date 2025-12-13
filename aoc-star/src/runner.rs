@@ -4,7 +4,7 @@ use chrono::Datelike;
 use crate::AocEntry;
 
 fn get_year(entry: &AocEntry) -> i32 {
-    entry.year.unwrap_or(chrono::Utc::now().year().into())
+    entry.year.unwrap_or(chrono::Utc::now().year())
 }
 
 fn get_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::Error>> {
