@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "aoc-star-runner",
+    "aoc-star-macros",
+]
+resolver = "2"
+

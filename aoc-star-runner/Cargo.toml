@@ -1,0 +1,13 @@
+[package]
+name = "aoc-star-runner"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aoc-star-macros = { path = "../aoc-star-macros" }
+inventory = "0.3"
+clap = { version = "4", features = ["derive"] }
+
+[lib]
+name = "aoc_star_runner"
+path = "src/lib.rs"
