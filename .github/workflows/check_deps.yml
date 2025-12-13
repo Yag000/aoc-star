@@ -4,6 +4,7 @@ on:
     paths:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
+      - ".github/workflows/check_deps.yml"
 
 env:
   CARGO_TERM_COLOR: always
@@ -23,13 +24,3 @@ jobs:
 
       - name: Check for unused dependencies
         run: cargo machete --with-metadata
-        continue-on-error: true
-        # We use continue-on-error to be able to see the output of the command in the logs
-        # even if unused dependencies are found.
-        # The job will still fail if unused dependencies are found.
-
-      - name: Upload machete report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: machete-report
