@@ -27,18 +27,16 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let day = match command_argument.day {
         Some(day) => day,
-        None => {
-            last_unlocked_day(year).unwrap_or_else(|| panic!("AoC {} is not unlocked yet", year))
-        }
+        None => last_unlocked_day(year).unwrap_or_else(|| panic!("AoC {year} is not unlocked yet")),
     };
 
     let part = command_argument.part.unwrap_or(1);
 
     let entry = inventory::iter::<AocEntry>()
         .find(|e| e.day == day && e.part == part && e.year == Some(year))
-        .ok_or_else(|| panic!("No solution found for day {} part {}", day, part))?;
+        .ok_or_else(|| panic!("No solution found for day {day} part {part}"))?;
 
-    println!("Executing day {} part {}", day, part);
+    println!("Executing day {day} part {part} of year {year}");
 
     run_day(
         entry,
