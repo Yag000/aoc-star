@@ -1,0 +1,5 @@
+error: expected integer literal
+ --> tests/ui/star_invalid_args.rs:3:14
+  |
+3 | #[star(day = "1", part = 2)]
+  |              ^^^
