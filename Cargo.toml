@@ -1,7 +1,7 @@
 [workspace]
 members = [
-    "aoc-star-runner",
-    "aoc-star-macros",
+    "aoc-star",
+    "aoc-star-derive",
 ]
 resolver = "2"
 

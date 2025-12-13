@@ -1,12 +1,15 @@
 [package]
-name = "aoc-star-runner"
+name = "aoc-star"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-aoc-star-macros = { path = "../aoc-star-macros" }
+aoc-star-derive= { path = "../aoc-star-derive" }
 inventory = "0.3"
 clap = { version = "4", features = ["derive"] }
+aoc-client = "0.2.0"
+dotenv = "0.15.0"
+chrono = "0.4.42"
 
 
 [dev-dependencies]

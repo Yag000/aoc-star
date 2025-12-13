@@ -23,7 +23,7 @@ pub fn star(attr: TokenStream, item: TokenStream) -> TokenStream {
         #input_fn
 
         inventory::submit! {
-            aoc_star_runner::AocEntry {
+            aoc_star::AocEntry {
                 day: #day,
                 part: #part,
                 year: #year,
