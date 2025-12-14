@@ -23,7 +23,7 @@ fn get_input(
     entry: &AocEntry,
     input_file: &Option<String>,
 ) -> Result<String, Box<dyn std::error::Error>> {
-    match input_file{
+    match input_file {
         Some(filename) => Ok(std::fs::read_to_string(filename)?),
         None => get_remote_input(entry),
     }
