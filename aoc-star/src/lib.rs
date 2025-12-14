@@ -37,7 +37,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     run_day(
         entry,
         command_argument.publish,
-        &command_argument.input_filename,
+        &command_argument.input_file,
     )?;
 
     Ok(())

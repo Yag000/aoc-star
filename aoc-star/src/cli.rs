@@ -11,7 +11,7 @@ pub struct CommandArgument {
     pub year: Option<i32>,
 
     #[clap(long)]
-    pub input_filename: Option<String>,
+    pub input_file: Option<String>,
 
     #[clap(long)]
     pub publish: bool,

@@ -21,9 +21,9 @@ fn build_aoc_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::E
 
 fn get_input(
     entry: &AocEntry,
-    input_filename: &Option<String>,
+    input_file: &Option<String>,
 ) -> Result<String, Box<dyn std::error::Error>> {
-    match input_filename {
+    match input_file{
         Some(filename) => Ok(std::fs::read_to_string(filename)?),
         None => get_remote_input(entry),
     }
@@ -45,9 +45,9 @@ fn get_remote_input(_: &AocEntry) -> Result<String, Box<dyn std::error::Error>> 
 pub(crate) fn run_day(
     entry: &AocEntry,
     publish: bool,
-    input_filename: &Option<String>,
+    input_file: &Option<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let result = (entry.func)(get_input(entry, input_filename)?);
+    let result = (entry.func)(get_input(entry, input_file)?);
 
     if publish {
         publish_result(entry, &result)?;
