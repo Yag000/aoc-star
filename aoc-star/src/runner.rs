@@ -14,7 +14,7 @@ pub(crate) fn config_year() -> i32 {
 
 #[allow(dead_code)]
 fn resolve_year(entry: &AocEntry) -> i32 {
-    entry.year.unwrap_or_else(|| config_year())
+    entry.year.unwrap_or_else(config_year)
 }
 
 #[cfg(feature = "aoc-client")]
@@ -25,8 +25,7 @@ fn get_cookie() -> Result<String, Box<dyn std::error::Error>> {
     } else if let Ok(env_cookie) = std::env::var("AOC_TOKEN").as_ref() {
         Ok(env_cookie.clone())
     } else {
-        Err(Box::new(std::io::Error::new(
-            std::io::ErrorKind::Other,
+        Err(Box::new(std::io::Error::other(
             "AOC session cookie is missing. Please set it in the config file or AOC_TOKEN environment variable.",
         )))
     }
@@ -38,7 +37,7 @@ fn build_aoc_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::E
 
     Ok(AocClient::builder()
         .session_cookie(cookie)?
-        .year(resolve_year(entry) as i32)?
+        .year(resolve_year(entry))?
         .day(entry.day)?
         .build()?)
 }

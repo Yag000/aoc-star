@@ -29,7 +29,7 @@ pub(crate) fn get_config_token() -> String {
     }
 }
 
- fn get_global_config() -> Config {
+fn get_global_config() -> Config {
     let config_dir = dirs::config_dir()
         .unwrap_or_else(|| std::path::PathBuf::from("."))
         .join("aoc-star");
