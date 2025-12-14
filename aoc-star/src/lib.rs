@@ -1,15 +1,26 @@
+//! # AOC Star
+
 mod cli;
 mod config;
 mod runner;
 
+// Re-export the star macro
 pub use aoc_star_derive::star;
+
 use clap::Parser;
+// This re-export is unfortunately necessary because
+// the macro expansions of the `aoc_star_derive::star` macro
+// need to access the `inventory` crate from the same namespace
+// as this crate. There may be a better way to handle this in the future.
 pub use inventory;
 
-use crate::{
-    cli::CommandArgument,
-    runner::{config_year, run_day},
-};
+use crate::runner::run_with_result;
+
+#[cfg(any(test, feature = "test-helpers"))]
+pub mod test_helpers {
+    pub use crate::cli::CommandArgument;
+    pub use crate::runner::run_with_result;
+}
 
 pub struct AocEntry {
     pub day: u32,
@@ -20,30 +31,17 @@ pub struct AocEntry {
 
 inventory::collect!(AocEntry);
 
+/// Run the Advent of Code solution based on command line arguments
+/// It should be used in the main function of the binary crate
+/// ```no_run
+/// fn main() -> Result<(), Box<dyn std::error::Error>> {
+///    aoc_star::run()
+///    }
+/// ```
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
-    let command_argument = CommandArgument::parse();
-
-    let year = command_argument.year.unwrap_or(config_year());
-
-    let day = command_argument.day;
-
-    let part = command_argument.part.unwrap_or(1);
-
-    let entry = inventory::iter::<AocEntry>()
-        .find(|e| {
-            e.day == day
-                && e.part == part
-                && (e.year == Some(year) || (e.year.is_none() && year == config_year()))
-        })
-        .ok_or_else(|| panic!("No solution found for day {day} part {part} of year {year}"))?;
-
-    println!("Executing day {day} part {part} of year {year}");
-
-    run_day(
-        entry,
-        command_argument.publish,
-        &command_argument.input_file,
-    )?;
-
+    // We get the command line arguments
+    let command_argument = cli::CommandArgument::parse();
+    let result = run_with_result(command_argument)?;
+    println!("{}", result);
     Ok(())
 }

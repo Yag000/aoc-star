@@ -2,6 +2,15 @@
 name = "aoc-star-derive"
 version = "0.1.0"
 edition = "2024"
+description = "Macro to flag functions as Advent of Code solutions"
+authors = ["Yago Iglesias Vazquez  <yago@yagoiglesias.fr>"]
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/Yag000/aoc-star/tree/main/aoc-star-derive"
+repository = "https://github.com/Yag000/aoc-star/tree/main/aoc-star-derive"
+documentation = "https://docs.rs/aoc-star-derive"
+keywords = ["Advent of Code", "AoC", "macro"]
+
 
 [lib]
 proc-macro = true

@@ -95,6 +95,7 @@ name = "aoc-star"
 version = "0.1.0"
 dependencies = [
  "aoc-client",
+ "aoc-star",
  "aoc-star-derive",
  "chrono",
  "clap",
@@ -102,6 +103,7 @@ dependencies = [
  "inventory",
  "serde",
  "serde_yaml",
+ "tempfile",
  "trybuild",
 ]
 

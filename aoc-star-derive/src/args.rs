@@ -1,6 +1,8 @@
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
+
+/// Struct representing the parsed arguments for the `star` macro.
 #[derive(Debug)]
 pub struct AocArgs {
     pub day: u32,

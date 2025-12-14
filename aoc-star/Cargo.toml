@@ -2,6 +2,14 @@
 name = "aoc-star"
 version = "0.1.0"
 edition = "2024"
+description = "Library and CLI tool to manage your Advent of Code solutions"
+authors = ["Yago Iglesias Vazquez  <yago@yagoiglesias.fr>"]
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/Yag000/aoc-star"
+repository = "https://github.com/Yag000/aoc-star"
+documentation = "https://docs.rs/aoc-star"
+keywords = ["Advent of Code", "AoC", "macro", "cli", "library"]
 
 [dependencies]
 aoc-star-derive= { path = "../aoc-star-derive" }
@@ -15,8 +23,11 @@ dirs = "6.0.0"
 
 [features]
 default = []
+test-helpers = []
 aoc-client = ["dep:aoc-client"]
 
 
 [dev-dependencies]
+tempfile = "3.23.0"
 trybuild = "1.0.114"
+aoc-star = { path = ".", features = ["test-helpers"] }
