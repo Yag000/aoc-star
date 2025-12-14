@@ -1,20 +1,44 @@
 use chrono::Datelike;
 
-use crate::AocEntry;
+#[allow(unused_imports)]
+use crate::{AocEntry, config::get_config, config::get_config_token};
 
 #[cfg(feature = "aoc-client")]
 use aoc_client::AocClient;
 
+pub(crate) fn config_year() -> i32 {
+    get_config()
+        .year
+        .unwrap_or_else(|| chrono::Utc::now().year())
+}
+
 #[allow(dead_code)]
 fn resolve_year(entry: &AocEntry) -> i32 {
-    entry.year.unwrap_or_else(|| chrono::Utc::now().year())
+    entry.year.unwrap_or_else(|| config_year())
+}
+
+#[cfg(feature = "aoc-client")]
+fn get_cookie() -> Result<String, Box<dyn std::error::Error>> {
+    let config_cookie = get_config_token();
+    if !config_cookie.is_empty() {
+        Ok(config_cookie)
+    } else if let Ok(env_cookie) = std::env::var("AOC_TOKEN").as_ref() {
+        Ok(env_cookie.clone())
+    } else {
+        Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "AOC session cookie is missing. Please set it in the config file or AOC_TOKEN environment variable.",
+        )))
+    }
 }
 
 #[cfg(feature = "aoc-client")]
 fn build_aoc_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::Error>> {
+    let cookie = get_cookie()?;
+
     Ok(AocClient::builder()
-        .session_cookie_from_default_locations()?
-        .year(resolve_year(entry))?
+        .session_cookie(cookie)?
+        .year(resolve_year(entry) as i32)?
         .day(entry.day)?
         .build()?)
 }

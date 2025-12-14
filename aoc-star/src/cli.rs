@@ -1,6 +1,6 @@
 use clap::Parser;
 #[derive(Parser, Clone, Debug)]
-pub struct CommandArgument {
+pub(crate) struct CommandArgument {
     #[clap(short, long)]
     pub day: u32,
 
