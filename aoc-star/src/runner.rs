@@ -19,9 +19,25 @@ pub fn run_with_result(
     let part = command_argument.part;
 
     // We look for the corresponding entry in the inventory
-    let entry = inventory::iter::<AocEntry>()
-        .find(|e| e.day == day && e.part == part && (e.year == Some(year) || (e.year.is_none())))
-        .ok_or_else(|| panic!("No solution found for Day {day} Part {part} of Year {year}"))?;
+    // If no specific year match is found, we fall back to year-agnostic solutions
+    // If no solution is found, we panic
+    let mut entry: Option<&AocEntry> = None;
+    for e in inventory::iter::<AocEntry> {
+        if e.day == day && e.part == part {
+            if let Some(e_year) = e.year {
+                if e_year == year {
+                    entry = Some(e);
+                    break;
+                }
+            } else if entry.is_none() {
+                entry = Some(e);
+            }
+        }
+    }
+
+    let entry = entry.expect(&format!(
+        "No solution found for Day {day} Part {part} of Year {year}"
+    ));
 
     println!("Executing Day {day} Part {part} of Year {year}");
 

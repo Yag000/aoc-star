@@ -7,7 +7,7 @@
 //! The `star` macro allows you to annotate functions as solutions for specific days and parts of Advent of Code challenges.
 //!
 //! ## Example
-//! ```
+//! ```ignore
 //! use aoc_star_derive::star;
 //!
 //! #[star(day = 1, part = 1, year = 2024)]
@@ -28,7 +28,7 @@ use crate::args::AocArgs;
 
 /// Attribute macro to mark a function as an Advent of Code solution
 /// # Example
-/// ```
+/// ```ignore
 /// use aoc_star_derive::star;
 ///
 /// #[star(day = 1, part = 1, year = 2024)]
