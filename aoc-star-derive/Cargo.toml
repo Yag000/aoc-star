@@ -9,7 +9,7 @@ license = "MIT OR Apache-2.0"
 homepage = "https://github.com/Yag000/aoc-star/tree/main/aoc-star-derive"
 repository = "https://github.com/Yag000/aoc-star/tree/main/aoc-star-derive"
 documentation = "https://docs.rs/aoc-star-derive"
-keywords = ["Advent of Code", "AoC", "macro"]
+keywords = ["AdventOfCode", "AoC", "macro"]
 
 
 [lib]
