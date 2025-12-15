@@ -174,8 +174,8 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     // We get the command line arguments
     let command_argument = cli::CommandArgument::parse();
     if command_argument.setup {
-        config::setup_config()?;
-        println!("Config file created successfully.");
+        config::setup_config_prompt()?;
+        println!("Configuration file created successfully.");
         return Ok(());
     }
     let result = run_with_result(command_argument)?;

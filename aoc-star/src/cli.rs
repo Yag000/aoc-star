@@ -5,8 +5,8 @@
 use clap::Parser;
 #[derive(Parser, Clone, Debug)]
 pub struct CommandArgument {
-    #[clap(short, long)]
-    pub day: u32,
+    #[clap(short, long, required_unless_present = "setup")]
+    pub day: Option<u32>,
 
     #[clap(short, long, default_value_t = 1)]
     pub part: u32,

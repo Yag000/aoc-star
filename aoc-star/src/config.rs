@@ -108,13 +108,15 @@ fn get_config_path() -> Option<ConfigFileLocation> {
         }
     }
 }
+
 // Sets up the config file in the global config directory if there is no config file yet
-pub(crate) fn setup_config() -> Result<Config, Box<dyn std::error::Error>> {
+fn setup_config() -> Result<Config, Box<dyn std::error::Error>> {
     let path: PathBuf = ConfigFileLocation::GlobalDir.into();
 
     if path.exists() {
-        return Err("Config file already exists.".into());
+        return get_config();
     }
+
     let config = Config::from_env();
     write_config(&config, ConfigFileLocation::GlobalDir)?;
     Ok(config)
@@ -140,4 +142,56 @@ fn update_token(
     let contents = serde_yaml::to_string(&config)?;
     std::fs::write(path, contents)?;
     Ok(())
+}
+
+pub(crate) fn setup_config_prompt() -> Result<(), Box<dyn std::error::Error>> {
+    if config_file_exists() {
+        println!("Config file already exists. Aborting setup.");
+        return Ok(());
+    }
+    let token = prompt_for_token()?;
+    let year = prompt_for_year()?;
+
+    create_global_config(token, Some(year))?;
+    Ok(())
+}
+
+fn prompt_for_token() -> Result<String, Box<dyn std::error::Error>> {
+    use std::io::{self, Write};
+
+    print!("Enter your Advent of Code session token: ");
+    io::stdout().flush()?;
+
+    let mut token = String::new();
+    io::stdin().read_line(&mut token)?;
+    Ok(token.trim().to_string())
+}
+
+fn prompt_for_year() -> Result<i32, Box<dyn std::error::Error>> {
+    use std::io::{self, Write};
+
+    print!("Enter the default Advent of Code year (e.g., 2024) or leave blank for current year: ");
+    io::stdout().flush()?;
+
+    let mut year_input = String::new();
+    io::stdin().read_line(&mut year_input)?;
+    let year_input = year_input.trim();
+    if year_input.is_empty() {
+        Ok(chrono::Utc::now().year())
+    } else {
+        let year: i32 = year_input.parse()?;
+        Ok(year)
+    }
+}
+
+pub fn config_file_exists() -> bool {
+    get_config_path().is_some()
+}
+
+pub fn create_global_config(
+    token: String,
+    year: Option<i32>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config { token, year };
+    write_config(&config, ConfigFileLocation::GlobalDir)
 }

@@ -12,14 +12,11 @@ use aoc_client::AocClient;
 pub fn run_with_result(
     command_argument: CommandArgument,
 ) -> Result<String, Box<dyn std::error::Error>> {
-    println!("eyahh");
     let year = command_argument
         .year
         .unwrap_or_else(|| config_year().unwrap());
 
-    println!("yooo");
-
-    let day = command_argument.day;
+    let day = command_argument.day.expect("Day is required");
 
     let part = command_argument.part;
 
