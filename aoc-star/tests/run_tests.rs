@@ -35,6 +35,7 @@ fn test_run_day3_part1_2024() {
         year: Some(2024),
         input_file: Some(tmp.path().to_str().unwrap().to_string()),
         publish: false,
+        setup: false,
     };
 
     let result = run_with_result(args).unwrap();
@@ -52,6 +53,7 @@ fn test_run_day3_part2_2024() {
         year: Some(2024),
         input_file: Some(tmp.path().to_str().unwrap().to_string()),
         publish: false,
+        setup: false,
     };
 
     let result = run_with_result(args).unwrap();
@@ -69,6 +71,7 @@ fn test_run_day1_part1_none() {
         year: Some(2025),
         input_file: Some(tmp.path().to_str().unwrap().to_string()),
         publish: false,
+        setup: false,
     };
 
     let result = run_with_result(args).unwrap();
@@ -85,6 +88,7 @@ fn test_run_non_existent_solution() {
         year: Some(2018),
         input_file: None,
         publish: false,
+        setup: false,
     };
     let _ = run_with_result(args).unwrap();
 }
