@@ -146,7 +146,6 @@ fn publish_result(entry: &AocEntry, result: &str) -> Result<(), Box<dyn std::err
 mod tests {
     use std::io::Write;
 
-    use super::*;
     use crate::AocEntry;
     use tempfile::NamedTempFile;
 
@@ -171,6 +170,8 @@ mod tests {
     #[should_panic(expected = "Remote input is disabled")]
     #[cfg(not(feature = "aoc-client"))]
     fn get_input_panics_without_aoc_client_and_no_file() {
+        use crate::runner::get_input;
+
         let entry = AocEntry {
             day: 1,
             part: 1,
@@ -187,6 +188,8 @@ mod tests {
     )]
     #[cfg(not(feature = "aoc-client"))]
     fn publish_result_panics_without_aoc_client() {
+        use crate::runner::publish_result;
+
         let entry = AocEntry {
             day: 1,
             part: 1,
