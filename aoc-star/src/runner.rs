@@ -35,9 +35,7 @@ pub fn run_with_result(
         }
     }
 
-    let entry = entry.expect(&format!(
-        "No solution found for Day {day} Part {part} of Year {year}"
-    ));
+    let entry = entry.unwrap_or_else(|| panic!("No solution found for Day {day} Part {part} of Year {year}"));
 
     println!("Executing Day {day} Part {part} of Year {year}");
 

@@ -41,9 +41,9 @@ enum ConfigFileLocation {
     GlobalDir,
 }
 
-impl Into<PathBuf> for ConfigFileLocation {
-    fn into(self) -> std::path::PathBuf {
-        match self {
+impl From<ConfigFileLocation> for PathBuf {
+    fn from(val: ConfigFileLocation) -> Self {
+        match val {
             ConfigFileLocation::CurrentDir => std::path::PathBuf::from("aoc-star.yml"),
             ConfigFileLocation::GlobalDir => {
                 let config_dir = dirs::config_dir()
