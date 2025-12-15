@@ -12,7 +12,7 @@ use aoc_client::AocClient;
 pub fn run_with_result(
     command_argument: CommandArgument,
 ) -> Result<String, Box<dyn std::error::Error>> {
-    let year = command_argument.year.unwrap_or(config_year());
+    let year = command_argument.year.unwrap_or(config_year()?);
 
     let day = command_argument.day;
 
@@ -49,10 +49,10 @@ pub fn run_with_result(
     )
 }
 /// Retrieves the configured year or defaults to the current year.
-pub(crate) fn config_year() -> i32 {
-    get_config()
+pub(crate) fn config_year() -> Result<i32, Box<dyn std::error::Error>> {
+    Ok(get_config()?
         .year
-        .unwrap_or_else(|| chrono::Utc::now().year())
+        .unwrap_or_else(|| chrono::Utc::now().year()))
 }
 
 /// Executes the given AocEntry with the provided options.
@@ -103,14 +103,14 @@ fn build_aoc_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::E
 
     Ok(AocClient::builder()
         .session_cookie(cookie)?
-        .year(resolve_year(entry))?
+        .year(resolve_year(entry)?)?
         .day(entry.day)?
         .build()?)
 }
 #[cfg(feature = "aoc-client")]
 /// Retrieves the session cookie from the config file or environment variable.
 fn get_cookie() -> Result<String, Box<dyn std::error::Error>> {
-    let config_cookie = get_config_token();
+    let config_cookie = get_config_token()?;
     if !config_cookie.is_empty() {
         Ok(config_cookie)
     } else if let Ok(env_cookie) = std::env::var("AOC_TOKEN").as_ref() {
@@ -123,8 +123,11 @@ fn get_cookie() -> Result<String, Box<dyn std::error::Error>> {
 }
 #[cfg(feature = "aoc-client")]
 /// Resolves the year for the given AocEntry.
-fn resolve_year(entry: &AocEntry) -> i32 {
-    entry.year.unwrap_or_else(config_year)
+fn resolve_year(entry: &AocEntry) -> Result<i32, Box<dyn std::error::Error>> {
+    match entry.year {
+        Some(year) => Ok(year),
+        None => config_year(),
+    }
 }
 
 #[cfg(not(feature = "aoc-client"))]

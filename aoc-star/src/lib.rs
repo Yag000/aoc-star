@@ -54,8 +54,37 @@
 //! - `test-helpers`: re-exports some internals (`CommandArgument` and
 //!   `run_with_result`) to make integration testing easier.
 //!
-//! See the crate-level documentation of the `aoc-star-derive` crate for more
-//! details on the `#[star]` macro itself.
+//!! ### `star` macro
+//!
+//! The `#[star(day = X, part = Y, year = Z)]` attribute macro registers
+//! the annotated function as the solution for the specified day, part, and
+//! optional year. The function must have the signature `fn(String) -> String`,
+//! where the input `String` contains the puzzle input, and the returned
+//! `String` is the answer.
+//!
+//! If the `year` parameter is omitted, the solution is considered
+//! year-agnostic and will be used for any year that does not halve a more specific solution.
+//!
+//! ### CLI arguments
+//!
+//! The `run` function parses the following command line arguments:
+//!
+//! - `--day <DAY>`: The Advent of Code day (1–25).
+//! - `--part <PART>`: The puzzle part (usually 1 or 2).
+//! - `--year <YEAR>`: The Advent of Code year (e.g., 2024). Defaults to
+//!   the current year if not provided.
+//! - `--input-file <FILE>`: Path to a file containing the puzzle input.
+//!   This argument is required if the `aoc-client` feature is not enabled.
+//! - `--publish`: If provided and the `aoc-client` feature is enabled,
+//!   the computed answer will be submitted to Advent of Code.
+//!
+//! The default year is either the one on the config file or the current year.
+//! The config contains the session cookie needed to fetch inputs and publish answers and
+//! the default year. If not present, the config file can be created by running
+//! this command with the `--setup` flag. It will be located at `$XDG_CONFIG_HOME/aoc-star/config.toml`
+//! which in linux systems usually resolves to `~/.config/aoc-star/config.toml`.
+//!
+//! ## License
 
 mod cli;
 mod config;
@@ -78,7 +107,7 @@ pub mod test_helpers {
     //! Helpers intended for testing `aoc-star` or crates that use it.
     //!
     //! This module is only available when the `test-helpers` feature is
-    //! enabled (or when compiling tests for this crate).
+    //! enabled
     //!
     //! It re-exports:
     //! - [`CommandArgument`](crate::cli::CommandArgument): the parsed CLI
@@ -96,7 +125,7 @@ pub mod test_helpers {
 /// usually do not construct this type directly.
 ///
 /// - `day`: The Advent of Code day (1–25).
-/// - `part`: The part of the puzzle (typically 1 or 2).
+/// - `part`: The part of the puzzle (1 or 2).
 /// - `year`: The Advent of Code year; if `None`, the solution is considered
 ///   year-agnostic and will be used for any year that does not have a
 ///   more specific solution.
@@ -144,6 +173,11 @@ inventory::collect!(AocEntry);
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     // We get the command line arguments
     let command_argument = cli::CommandArgument::parse();
+    if command_argument.setup {
+        config::setup_config()?;
+        println!("Config file created successfully.");
+        return Ok(());
+    }
     let result = run_with_result(command_argument)?;
     println!("{result}");
     Ok(())

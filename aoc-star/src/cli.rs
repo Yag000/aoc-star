@@ -22,6 +22,8 @@ pub struct CommandArgument {
     // Maybe in the future
     //#[clap(long)]
     //pub all: bool,
+    #[clap(long)]
+    pub setup: bool,
 }
 
 #[cfg(test)]

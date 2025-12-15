@@ -8,17 +8,14 @@
 //! ! If no config file is found, we create one in the global config directory
 //! ! using environment variables (AOC_TOKEN for the session cookie).
 
+use std::path::PathBuf;
+
 use chrono::Datelike;
 
 #[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
 pub(crate) struct Config {
     pub token: String,
     pub year: Option<i32>,
-}
-
-/// Get the default token from the environment variable AOC_TOKEN
-fn default_token() -> String {
-    std::env::var("AOC_TOKEN").unwrap_or_default()
 }
 
 impl Config {
@@ -33,52 +30,114 @@ impl Config {
     }
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Config::from_env()
+    }
+}
+
+enum ConfigFileLocation {
+    CurrentDir,
+    GlobalDir,
+}
+
+impl Into<PathBuf> for ConfigFileLocation {
+    fn into(self) -> std::path::PathBuf {
+        match self {
+            ConfigFileLocation::CurrentDir => std::path::PathBuf::from("aoc-star.yml"),
+            ConfigFileLocation::GlobalDir => {
+                let config_dir = dirs::config_dir()
+                    .unwrap_or_else(|| std::path::PathBuf::from("."))
+                    .join("aoc-star");
+                config_dir.join("config.yml")
+            }
+        }
+    }
+}
+
+/// Get the default token from the environment variable AOC_TOKEN
+fn default_token() -> String {
+    std::env::var("AOC_TOKEN").unwrap_or_default()
+}
+
 #[allow(dead_code)]
 /// Get the session token from the config file or global config
 /// If not found, return an empty string
 ///
 /// This function is only used when the "aoc-client" feature is enabled
 /// and the user wants to fetch input or submit answers.
-pub(crate) fn get_config_token() -> String {
-    let token = get_config().token;
+pub(crate) fn get_config_token() -> Result<String, Box<dyn std::error::Error>> {
+    let token = get_config()?.token;
     if !token.is_empty() {
-        token
+        Ok(token)
     } else {
-        get_global_config().token
+        let token = default_token();
+        update_token(token.clone(), ConfigFileLocation::GlobalDir).ok();
+        Ok(token)
     }
 }
 
-/// Get the global config from the config directory
-/// If not found, create a new config file from environment variables
-/// and return the config
-fn get_global_config() -> Config {
-    let config_dir = dirs::config_dir()
-        .unwrap_or_else(|| std::path::PathBuf::from("."))
-        .join("aoc-star");
-    std::fs::create_dir_all(&config_dir).ok();
-    let config_file = config_dir.join("config.yml");
-
-    if config_file.exists() {
-        let contents = std::fs::read_to_string(config_file).unwrap_or_default();
-        serde_yaml::from_str(&contents).unwrap_or_else(|_| Config::from_env())
-    } else {
-        // Create a new config from environment variables
-        let config = Config::from_env();
-        // We make sure to save the config file for future use
-        let contents = serde_yaml::to_string(&config).unwrap_or_default();
-        std::fs::write(config_file, contents).ok();
-        config
+/// Get the config from the current directory or global config
+pub(crate) fn get_config() -> Result<Config, Box<dyn std::error::Error>> {
+    let config_path = get_config_path();
+    match config_path {
+        Some(loc) => {
+            let path: PathBuf = loc.into();
+            let contents = std::fs::read_to_string(path)?;
+            serde_yaml::from_str(&contents).map_err(|e| e.into())
+        }
+        None => setup_config(),
     }
 }
 
-/// Get the config from the current directory or global config.
-pub(crate) fn get_config() -> Config {
-    // Check current directory for a config file first
+/// Finds the current config file. First it looks for aoc-star.yml on the current directory
+/// and if nto it defaults to  ~/.config/aoc-star/config.yml.
+fn get_config_path() -> Option<ConfigFileLocation> {
     let current_dir_config = std::path::PathBuf::from("aoc-star.yml");
     if current_dir_config.exists() {
-        let contents = std::fs::read_to_string(current_dir_config).unwrap_or_default();
-        return serde_yaml::from_str(&contents).unwrap_or_else(|_| Config::from_env());
+        Some(ConfigFileLocation::CurrentDir)
+    } else {
+        let config_file = dirs::config_dir()
+            .unwrap_or_else(|| std::path::PathBuf::from("."))
+            .join("aoc-star")
+            .join("config.yml");
+        if config_file.exists() {
+            Some(ConfigFileLocation::GlobalDir)
+        } else {
+            None
+        }
     }
-    // Fallback to global config
-    get_global_config()
+}
+// Sets up the config file in the global config directory if there is no config file yet
+pub(crate) fn setup_config() -> Result<Config, Box<dyn std::error::Error>> {
+    let path: PathBuf = ConfigFileLocation::GlobalDir.into();
+
+    if path.exists() {
+        return Err("Config file already exists.".into());
+    }
+    let config = Config::from_env();
+    write_config(&config, ConfigFileLocation::GlobalDir)?;
+    Ok(config)
+}
+
+fn write_config(
+    config: &Config,
+    location: ConfigFileLocation,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let path: PathBuf = location.into();
+    let contents = serde_yaml::to_string(config)?;
+    std::fs::write(path, contents)?;
+    Ok(())
+}
+
+fn update_token(
+    token: String,
+    location: ConfigFileLocation,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let mut config = get_config()?;
+    config.token = token;
+    let path: PathBuf = location.into();
+    let contents = serde_yaml::to_string(&config)?;
+    std::fs::write(path, contents)?;
+    Ok(())
 }
