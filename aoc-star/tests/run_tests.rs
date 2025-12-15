@@ -37,8 +37,11 @@ fn test_run_day3_part1_2024() {
         publish: false,
         setup: false,
     };
+    println!("{:?}", tmp.path());
 
     let result = run_with_result(args).unwrap();
+
+    println!("{:?}", tmp.path());
 
     assert_eq!(result.trim(), "answer-3-1-2024");
 }
@@ -74,7 +77,11 @@ fn test_run_day1_part1_none() {
         setup: false,
     };
 
+    println!("{:?}", tmp.path());
+
     let result = run_with_result(args).unwrap();
+
+    println!("{:?}", tmp.path());
 
     assert_eq!(result.trim(), "answer-3-2-none");
 }
