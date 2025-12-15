@@ -38,7 +38,7 @@ mod tests {
         let args = ["aoc-star", "--day", "3"];
         let cmd = CommandArgument::parse_from(&args);
 
-        assert_eq!(cmd.day, 3);
+        assert_eq!(cmd.day, Some(3));
         assert_eq!(cmd.part, 1);
         assert_eq!(cmd.year, None);
         assert_eq!(cmd.input_file, None);
@@ -61,7 +61,7 @@ mod tests {
         ];
         let cmd = CommandArgument::parse_from(&args);
 
-        assert_eq!(cmd.day, 5);
+        assert_eq!(cmd.day, Some(5));
         assert_eq!(cmd.part, 2);
         assert_eq!(cmd.year, Some(2024));
         assert_eq!(cmd.input_file.as_deref(), Some("input.txt"));
@@ -73,7 +73,7 @@ mod tests {
         let args = ["aoc-star", "-d", "10", "-p", "2", "-y", "2020"];
         let cmd = CommandArgument::parse_from(&args);
 
-        assert_eq!(cmd.day, 10);
+        assert_eq!(cmd.day, Some(10));
         assert_eq!(cmd.part, 2);
         assert_eq!(cmd.year, Some(2020));
     }

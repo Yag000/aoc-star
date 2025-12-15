@@ -30,7 +30,7 @@ fn test_run_day3_part1_2024() {
     let tmp = generate_dummy_file("dummy input");
 
     let args = CommandArgument {
-        day: 3,
+        day: Some(3),
         part: 1,
         year: Some(2024),
         input_file: Some(tmp.path().to_str().unwrap().to_string()),
@@ -51,7 +51,7 @@ fn test_run_day3_part2_2024() {
     let tmp = generate_dummy_file("dummy input");
 
     let args = CommandArgument {
-        day: 3,
+        day: Some(3),
         part: 2,
         year: Some(2024),
         input_file: Some(tmp.path().to_str().unwrap().to_string()),
@@ -69,7 +69,7 @@ fn test_run_day1_part1_none() {
     let tmp = generate_dummy_file("dummy input");
 
     let args = CommandArgument {
-        day: 1,
+        day: Some(1),
         part: 1,
         year: Some(2025),
         input_file: Some(tmp.path().to_str().unwrap().to_string()),
@@ -90,7 +90,7 @@ fn test_run_day1_part1_none() {
 #[should_panic(expected = "No solution found for Day 2 Part 1 of Year 2018")]
 fn test_run_non_existent_solution() {
     let args = CommandArgument {
-        day: 2,
+        day: Some(2),
         part: 1,
         year: Some(2018),
         input_file: None,
