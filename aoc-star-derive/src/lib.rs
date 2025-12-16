@@ -65,7 +65,7 @@ pub fn star(attr: TokenStream, item: TokenStream) -> TokenStream {
     let expanded = quote! {
         #input_fn
 
-        inventory::submit! {
+        aoc_star::inventory::submit! {
             aoc_star::AocEntry {
                 day: #day,
                 part: #part,

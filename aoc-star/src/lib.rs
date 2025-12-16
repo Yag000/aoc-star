@@ -142,7 +142,7 @@ pub struct AocEntry {
     pub func: fn(String) -> String,
 }
 
-inventory::collect!(AocEntry);
+crate::inventory::collect!(AocEntry);
 
 /// Run the Advent of Code solution based on command line arguments.
 ///

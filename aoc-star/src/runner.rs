@@ -24,7 +24,7 @@ pub fn run_with_result(
     // If no specific year match is found, we fall back to year-agnostic solutions
     // If no solution is found, we panic
     let mut entry: Option<&AocEntry> = None;
-    for e in inventory::iter::<AocEntry> {
+    for e in crate::inventory::iter::<AocEntry> {
         if e.day == day && e.part == part {
             if let Some(e_year) = e.year {
                 if e_year == year {
