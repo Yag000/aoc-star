@@ -94,7 +94,26 @@ fn get_remote_input(_: &AocEntry) -> Result<String, Box<dyn std::error::Error>> 
 
 #[cfg(feature = "aoc-client")]
 fn get_remote_input(entry: &AocEntry) -> Result<String, Box<dyn std::error::Error>> {
-    Ok(build_aoc_client(entry)?.get_input()?)
+    // TODO: write it up somewhere and check every time if it's there (maybe
+    // add some check to test someones hasnt changed it etc, a flag or something like that)
+    // before downloading ect. Probably use the input/ dir (create it if needed)
+
+    use std::path::PathBuf;
+
+    let mut path = PathBuf::from("input");
+    std::fs::create_dir_all(&path)?;
+    path.push(format!("{}{}.txt", entry.day, resolve_year(entry)?));
+
+    if path.exists() {
+        let input = std::fs::read_to_string(&path)?;
+
+        return Ok(input);
+    }
+
+    let input = build_aoc_client(entry)?.get_input()?;
+    std::fs::write(path, &input)?;
+
+    Ok(input)
 }
 
 #[cfg(feature = "aoc-client")]
