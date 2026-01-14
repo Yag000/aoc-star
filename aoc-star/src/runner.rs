@@ -5,8 +5,6 @@ use crate::cli::CommandArgument;
 use crate::{AocEntry, config::get_config};
 
 #[cfg(feature = "aoc-client")]
-use crate::config::get_config_token;
-#[cfg(feature = "aoc-client")]
 use aoc_client::AocClient;
 
 pub fn run_with_result(
@@ -94,10 +92,6 @@ fn get_remote_input(_: &AocEntry) -> Result<String, Box<dyn std::error::Error>> 
 
 #[cfg(feature = "aoc-client")]
 fn get_remote_input(entry: &AocEntry) -> Result<String, Box<dyn std::error::Error>> {
-    // TODO: write it up somewhere and check every time if it's there (maybe
-    // add some check to test someones hasnt changed it etc, a flag or something like that)
-    // before downloading ect. Probably use the input/ dir (create it if needed)
-
     use std::path::PathBuf;
 
     let mut path = PathBuf::from("input");
@@ -119,6 +113,7 @@ fn get_remote_input(entry: &AocEntry) -> Result<String, Box<dyn std::error::Erro
 #[cfg(feature = "aoc-client")]
 /// Builds an AocClient for the given AocEntry.
 fn build_aoc_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::Error>> {
+    use aoc_client::AocClient;
     let cookie = get_cookie()?;
 
     Ok(AocClient::builder()
@@ -130,6 +125,7 @@ fn build_aoc_client(entry: &AocEntry) -> Result<AocClient, Box<dyn std::error::E
 #[cfg(feature = "aoc-client")]
 /// Retrieves the session cookie from the config file or environment variable.
 fn get_cookie() -> Result<String, Box<dyn std::error::Error>> {
+    use crate::config::get_config_token;
     let config_cookie = get_config_token()?;
     if !config_cookie.is_empty() {
         Ok(config_cookie)
