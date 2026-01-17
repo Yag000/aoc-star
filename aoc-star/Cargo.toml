@@ -16,7 +16,7 @@ aoc-star-derive = "0.1.1"
 inventory = "0.3"
 clap = { version = "4", features = ["derive"] }
 aoc-client = { version = "0.2.0", optional = true }
-chrono = "0.4.42"
+chrono = "0.4.43"
 serde_yaml = "0.9.34"
 serde = { version = "1.0.228", features = ["derive"] }
 dirs = "6.0.0"
