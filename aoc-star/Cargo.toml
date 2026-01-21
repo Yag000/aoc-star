@@ -1,6 +1,6 @@
 [package]
 name = "aoc-star"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "Library and CLI tool to manage your Advent of Code solutions"
 authors = ["Yago Iglesias Vazquez  <yago@yagoiglesias.fr>"]
