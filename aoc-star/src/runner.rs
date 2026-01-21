@@ -94,18 +94,18 @@ fn get_remote_input(_: &AocEntry) -> Result<String, Box<dyn std::error::Error>> 
 fn get_remote_input(entry: &AocEntry) -> Result<String, Box<dyn std::error::Error>> {
     use std::path::PathBuf;
 
-    let mut path = PathBuf::from("input");
-    std::fs::create_dir_all(&path)?;
-    path.push(format!("{}{}.txt", entry.day, resolve_year(entry)?));
+    let mut input_path = PathBuf::from("input");
+    std::fs::create_dir_all(&input_path)?;
+    input_path.push(format!("{}_{}.txt", entry.day, resolve_year(entry)?));
 
-    if path.exists() {
-        let input = std::fs::read_to_string(&path)?;
+    if input_path.exists() {
+        let input = std::fs::read_to_string(&input_path)?;
 
         return Ok(input);
     }
 
     let input = build_aoc_client(entry)?.get_input()?;
-    std::fs::write(path, &input)?;
+    std::fs::write(input_path, &input)?;
 
     Ok(input)
 }
