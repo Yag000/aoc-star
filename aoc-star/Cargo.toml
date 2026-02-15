@@ -29,5 +29,5 @@ aoc-client = ["dep:aoc-client"]
 
 [dev-dependencies]
 tempfile = "3.25.0"
-trybuild = "1.0.115"
+trybuild = "1.0.116"
 aoc-star = { path = ".", features = ["test-helpers"] }
