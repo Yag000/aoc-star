@@ -16,5 +16,5 @@ keywords = ["AdventOfCode", "AoC", "macro"]
 proc-macro = true
 
 [dependencies]
-syn = { version = "2", features = ["full"] }
+syn = { version = "3", features = ["full"] }
 quote = "1"
