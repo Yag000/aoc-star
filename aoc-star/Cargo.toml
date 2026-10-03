@@ -19,7 +19,7 @@ aoc-client = { version = "0.2.0", optional = true }
 chrono = "0.4.44"
 serde_yaml = "0.9.34"
 serde = { version = "1.0.228", features = ["derive"] }
-dirs = "6.0.0"
+dirs = "7.0.0"
 
 [features]
 default = []
