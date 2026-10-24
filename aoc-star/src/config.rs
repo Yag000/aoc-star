@@ -84,7 +84,7 @@ pub(crate) fn get_config() -> Result<Config, Box<dyn std::error::Error>> {
         Some(loc) => {
             let path: PathBuf = loc.into();
             let contents = std::fs::read_to_string(path)?;
-            serde_yaml::from_str(&contents).map_err(|e| e.into())
+            serde_saphyr::from_str(&contents).map_err(|e| e.into())
         }
         None => setup_config(),
     }
@@ -127,7 +127,7 @@ fn write_config(
     location: ConfigFileLocation,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let path: PathBuf = location.into();
-    let contents = serde_yaml::to_string(config)?;
+    let contents = serde_saphyr::to_string(config)?;
     std::fs::write(path, contents)?;
     Ok(())
 }
@@ -139,7 +139,7 @@ fn update_token(
     let mut config = get_config()?;
     config.token = token;
     let path: PathBuf = location.into();
-    let contents = serde_yaml::to_string(&config)?;
+    let contents = serde_saphyr::to_string(&config)?;
     std::fs::write(path, contents)?;
     Ok(())
 }
